@@ -12,6 +12,10 @@ gateway:
           methods: [ GET ]
         - path: /legacy/api/payments/**
           methods: [ GET ]
+        - path: /legacy/api/files/import
+          methods: [ POST ]
+        - path: /legacy/api/files/export
+          methods: [ GET ]
         - path: /legacy/api/auth/login
           methods: [ POST ]
         - path: /health
@@ -27,6 +31,10 @@ gateway:
         - path: /modernized/api/users/**
           methods: [ GET ]
         - path: /modernized/api/payments/**
+          methods: [ GET ]
+        - path: /modernized/api/files/import
+          methods: [ POST ]
+        - path: /modernized/api/files/export
           methods: [ GET ]
         - path: /modernized/api/auth/login
           methods: [ POST ]
