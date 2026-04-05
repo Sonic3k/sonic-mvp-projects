@@ -1,69 +1,103 @@
 gateway:
   backends:
 
-    - id: mock-legacy
-      base-url: ${MOCK_LEGACY_BASE_URL:http://localhost:8081}
+    # ── OOG Pricing Backend ───────────────────────────────────────
+    # All pricing APIs exposed (users/master-values/audit-logs excluded)
+    - id: oog-pricing
+      base-url: ${OOG_PRICING_BASE_URL:http://localhost:8081}
       routes:
-        - path: /legacy/api/products/**
-          methods: [ GET ]
-        - path: /legacy/api/orders/**
-          methods: [ GET ]
-        - path: /legacy/api/users/**
-          methods: [ GET ]
-        - path: /legacy/api/payments/**
-          methods: [ GET ]
-        - path: /legacy/api/files/**
+        - path: /api/quotations/**
           methods: [ GET, POST ]
-        - path: /legacy/api/auth/login
-          methods: [ POST ]
-        - path: /health
+        - path: /api/oceans/**
+          methods: [ GET, POST, PUT, DELETE ]
+        - path: /api/port-cons/**
+          methods: [ GET, POST, PUT, DELETE ]
+        - path: /api/port-restrictions/**
+          methods: [ GET, POST, PUT, DELETE ]
+        - path: /api/exchange-rates/**
+          methods: [ GET, POST, PUT, DELETE ]
+        - path: /api/negotiations/**
+          methods: [ GET, POST, PUT ]
+        - path: /api/oog-teus/**
+          methods: [ GET, POST, PUT, DELETE ]
+        - path: /api/oog-dimensions/**
+          methods: [ GET, POST, PUT, DELETE ]
+        - path: /api/pod-refs/**
+          methods: [ GET, POST, PUT, DELETE ]
+        - path: /api/pol-refs/**
+          methods: [ GET, POST, PUT, DELETE ]
+        - path: /api/formulas/**
+          methods: [ GET, POST, PUT, DELETE ]
+        - path: /api/formula-types/**
+          methods: [ GET, POST, PUT, DELETE ]
+        - path: /api/sq-files/**
+          methods: [ GET, POST, PUT ]
+        - path: /api/dropdown-lists/**
+          methods: [ GET, POST ]
+        - path: /api/version
           methods: [ GET ]
 
-    - id: mock-modernized
-      base-url: ${MOCK_MODERNIZED_BASE_URL:http://localhost:8081}
+    # ── OOG Supporting Service ────────────────────────────────────
+    # Migrated services: users, master-values, audit-logs
+    # Read-only: no create/update/delete
+    - id: oog-supporting
+      base-url: ${OOG_SUPPORTING_BASE_URL:http://localhost:8082}
       routes:
-        - path: /modernized/api/products/**
+        # users - readonly
+        - path: /api/users/trades
           methods: [ GET ]
-        - path: /modernized/api/orders/**
+        - path: /api/users/exists
           methods: [ GET ]
-        - path: /modernized/api/users/**
+        - path: /api/users/{loginId}
           methods: [ GET ]
-        - path: /modernized/api/payments/**
+        - path: /api/users/id/{id}
           methods: [ GET ]
-        - path: /modernized/api/files/**
-          methods: [ GET, POST ]
-        - path: /modernized/api/auth/login
+        - path: /api/users/search
           methods: [ POST ]
-        - path: /health
-          methods: [ GET ]
+        - path: /api/users/count
+          methods: [ POST ]
+        - path: /api/users/export
+          methods: [ POST ]
 
-    # ── Production backends ───────────────────────────────────────
-    # - id: oog-pricing
-    #   base-url: ${OOG_PRICING_BASE_URL}
-    #   routes:
-    #     - path: /api/quotations/calculate-rate
-    #       methods: [ POST ]
-    #     - path: /api/quotations/tariffs/pol
-    #       methods: [ POST ]
-    #     - path: /api/quotations/tariffs/pod
-    #       methods: [ POST ]
-    #     - path: /api/quotations/oog-dimensions
-    #       methods: [ POST ]
-    #     - path: /api/quotations/filtered-ocean
-    #       methods: [ POST ]
-    #     - path: /api/quotations/filtered-port-con
-    #       methods: [ POST ]
-    #     - path: /api/quotations/check-container-type
-    #       methods: [ GET ]
-    #     - path: /api/oceans/by-criteria1
-    #       methods: [ POST ]
-    #     - path: /api/port-restrictions/**
-    #       methods: [ GET ]
-    #
-    # - id: oog-supporting
-    #   base-url: ${OOG_SUPPORTING_BASE_URL}
-    #   routes:
-    #     - path: /api/exchange-rates/**
-    #       methods: [ GET ]
-    #     - path: /api/master-values/**
-    #       methods: [ GET ]
+        # master-values - readonly
+        - path: /api/master-values/by-code-domain
+          methods: [ GET ]
+        - path: /api/master-values/by-code-domain-trade
+          methods: [ GET ]
+        - path: /api/master-values/by-container-type-mode
+          methods: [ GET ]
+        - path: /api/master-values/by-code
+          methods: [ GET ]
+        - path: /api/master-values/code-by-code-domain
+          methods: [ GET ]
+        - path: /api/master-values/disable-empty-back-charge
+          methods: [ GET ]
+        - path: /api/master-values/exchange-mandatory
+          methods: [ GET ]
+        - path: /api/master-values/validate-match
+          methods: [ GET ]
+        - path: /api/master-values/check-reference
+          methods: [ GET ]
+        - path: /api/master-values/master-term
+          methods: [ GET ]
+        - path: /api/master-values/master-term-description
+          methods: [ GET ]
+        - path: /api/master-values/max-display-seq
+          methods: [ GET ]
+        - path: /api/master-values/{id}
+          methods: [ GET ]
+        - path: /api/master-values/search
+          methods: [ POST ]
+        - path: /api/master-values/count
+          methods: [ POST ]
+
+        # audit-logs - readonly
+        - path: /api/audit-logs/search
+          methods: [ POST ]
+        - path: /api/audit-logs/count
+          methods: [ POST ]
+        - path: /api/audit-logs/export
+          methods: [ POST ]
+
+        - path: /api/version
+          methods: [ GET ]
