@@ -4,7 +4,7 @@ gateway:
     # ── OOG Pricing Backend ───────────────────────────────────────
     # All pricing APIs exposed (users/master-values/audit-logs excluded)
     - id: oog-pricing
-      base-url: ${OOG_PRICING_BASE_URL:http://localhost:8081}
+      base-url: ${OOG_PRICING_BACKEND_BASE_URL}
       routes:
         - path: /api/quotations/**
           methods: [ GET, POST ]
@@ -41,7 +41,7 @@ gateway:
     # Migrated services: users, master-values, audit-logs
     # Read-only: no create/update/delete
     - id: oog-supporting
-      base-url: ${OOG_SUPPORTING_BASE_URL:http://localhost:8082}
+      base-url: ${OOG_SUPPORTING_BASE_URL}
       routes:
         # users - readonly
         - path: /api/users/trades
