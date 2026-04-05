@@ -1,0 +1,65 @@
+gateway:
+  backends:
+
+    - id: mock-legacy
+      base-url: ${MOCK_LEGACY_BASE_URL:http://localhost:8081}
+      routes:
+        - path: /legacy/api/products/**
+          methods: [ GET ]
+        - path: /legacy/api/orders/**
+          methods: [ GET ]
+        - path: /legacy/api/users/**
+          methods: [ GET ]
+        - path: /legacy/api/payments/**
+          methods: [ GET ]
+        - path: /legacy/api/auth/login
+          methods: [ POST ]
+        - path: /health
+          methods: [ GET ]
+
+    - id: mock-modernized
+      base-url: ${MOCK_MODERNIZED_BASE_URL:http://localhost:8081}
+      routes:
+        - path: /modernized/api/products/**
+          methods: [ GET ]
+        - path: /modernized/api/orders/**
+          methods: [ GET ]
+        - path: /modernized/api/users/**
+          methods: [ GET ]
+        - path: /modernized/api/payments/**
+          methods: [ GET ]
+        - path: /modernized/api/auth/login
+          methods: [ POST ]
+        - path: /health
+          methods: [ GET ]
+
+    # ── Production backends ───────────────────────────────────────
+    # - id: oog-pricing
+    #   base-url: ${OOG_PRICING_BASE_URL}
+    #   routes:
+    #     - path: /api/quotations/calculate-rate
+    #       methods: [ POST ]
+    #     - path: /api/quotations/tariffs/pol
+    #       methods: [ POST ]
+    #     - path: /api/quotations/tariffs/pod
+    #       methods: [ POST ]
+    #     - path: /api/quotations/oog-dimensions
+    #       methods: [ POST ]
+    #     - path: /api/quotations/filtered-ocean
+    #       methods: [ POST ]
+    #     - path: /api/quotations/filtered-port-con
+    #       methods: [ POST ]
+    #     - path: /api/quotations/check-container-type
+    #       methods: [ GET ]
+    #     - path: /api/oceans/by-criteria1
+    #       methods: [ POST ]
+    #     - path: /api/port-restrictions/**
+    #       methods: [ GET ]
+    #
+    # - id: oog-supporting
+    #   base-url: ${OOG_SUPPORTING_BASE_URL}
+    #   routes:
+    #     - path: /api/exchange-rates/**
+    #       methods: [ GET ]
+    #     - path: /api/master-values/**
+    #       methods: [ GET ]
