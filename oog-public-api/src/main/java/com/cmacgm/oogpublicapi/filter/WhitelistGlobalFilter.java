@@ -30,7 +30,7 @@ public class WhitelistGlobalFilter implements GlobalFilter, Ordered {
         String fullPath = exchange.getRequest().getPath().value();
         String method = exchange.getRequest().getMethod().name();
 
-        if (fullPath.startsWith("/actuator")) {
+        if (fullPath.startsWith("/actuator") || fullPath.startsWith("/api/version")) {
             return chain.filter(exchange);
         }
 
