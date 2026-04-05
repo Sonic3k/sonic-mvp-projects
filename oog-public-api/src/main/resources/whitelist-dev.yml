@@ -1,8 +1,3 @@
-# Override whitelist for dev environment
-# Spring loads this on top of whitelist.yml when profile 'dev' is active
-# Example: java -jar app.jar --spring.profiles.active=dev
-# K8s:     env SPRING_PROFILES_ACTIVE=dev
-
 gateway:
   backends:
 
@@ -17,6 +12,8 @@ gateway:
           methods: [ GET ]
         - path: /legacy/api/payments/**
           methods: [ GET ]
+        - path: /legacy/api/files/**
+          methods: [ GET, POST ]
         - path: /legacy/api/auth/login
           methods: [ POST ]
         - path: /health
@@ -33,6 +30,8 @@ gateway:
           methods: [ GET ]
         - path: /modernized/api/payments/**
           methods: [ GET ]
+        - path: /modernized/api/files/**
+          methods: [ GET, POST ]
         - path: /modernized/api/auth/login
           methods: [ POST ]
         - path: /health
