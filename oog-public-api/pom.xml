@@ -7,19 +7,18 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.5</version>
+        <version>3.5.9</version>
         <relativePath/>
     </parent>
 
-    <groupId>com.sonic</groupId>
+    <groupId>com.cmacgm</groupId>
     <artifactId>oog-public-api</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>oog-api-gateway</name>
     <description>OOG Public API Gateway - Proxy with whitelist routing for PWA mobile</description>
 
     <properties>
         <java.version>21</java.version>
-        <spring-cloud.version>2023.0.3</spring-cloud.version>
+        <spring-cloud.version>2025.0.0</spring-cloud.version>
     </properties>
 
     <dependencyManagement>
@@ -47,7 +46,7 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- OAuth2 Resource Server (OIDC JWT validation) - disabled by default for testing -->
+        <!-- OAuth2 Resource Server (OIDC JWT validation) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
