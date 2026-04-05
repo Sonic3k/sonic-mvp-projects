@@ -1,7 +1,7 @@
-package com.sonic.gateway.filter;
+package com.cmacgm.oogpublicapi.filter;
 
-import com.sonic.gateway.config.GatewayProperties;
-import com.sonic.gateway.config.GatewayProperties.BackendConfig;
+import com.cmacgm.oogpublicapi.config.GatewayProperties;
+import com.cmacgm.oogpublicapi.config.GatewayProperties.BackendConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -30,7 +30,6 @@ public class WhitelistGlobalFilter implements GlobalFilter, Ordered {
         String fullPath = exchange.getRequest().getPath().value();
         String method = exchange.getRequest().getMethod().name();
 
-        // Always allow actuator endpoints
         if (fullPath.startsWith("/actuator")) {
             return chain.filter(exchange);
         }
@@ -46,18 +45,16 @@ public class WhitelistGlobalFilter implements GlobalFilter, Ordered {
         String backendId = segments[1];
         String downstreamPath = segments.length > 2 ? "/" + segments[2] : "/";
 
-        // Find backend config
         BackendConfig backend = gatewayProperties.getBackends().stream()
             .filter(b -> b.getId().equals(backendId))
             .findFirst()
             .orElse(null);
 
         if (backend == null) {
-            log.warn("Unknown backend '{}' requested from {}", backendId, getClientIp(exchange));
+            log.warn("Unknown backend '{}' from {}", backendId, getClientIp(exchange));
             return forbidden(exchange, "Unknown backend: " + backendId);
         }
 
-        // Check if downstreamPath + method is in the whitelist
         boolean allowed = backend.getRoutes().stream().anyMatch(route -> {
             boolean pathMatch = pathMatcher.match(route.getPath(), downstreamPath);
             boolean methodMatch = route.getMethods().stream()
@@ -66,7 +63,7 @@ public class WhitelistGlobalFilter implements GlobalFilter, Ordered {
         });
 
         if (!allowed) {
-            log.warn("Blocked [{}] {} {} — not in whitelist for backend '{}'",
+            log.warn("Blocked [{}] {} {} — not in whitelist for '{}'",
                 getClientIp(exchange), method, downstreamPath, backendId);
             return forbidden(exchange, method + " " + downstreamPath + " is not exposed");
         }
@@ -79,14 +76,8 @@ public class WhitelistGlobalFilter implements GlobalFilter, Ordered {
         var response = exchange.getResponse();
         response.setStatusCode(HttpStatus.FORBIDDEN);
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-
-        String body = """
-            {"status":403,"error":"Forbidden","message":"%s"}
-            """.formatted(reason);
-
-        DataBuffer buffer = response.bufferFactory()
-            .wrap(body.getBytes(StandardCharsets.UTF_8));
-
+        String body = "{\"status\":403,\"error\":\"Forbidden\",\"message\":\"%s\"}".formatted(reason);
+        DataBuffer buffer = response.bufferFactory().wrap(body.getBytes(StandardCharsets.UTF_8));
         return response.writeWith(Mono.just(buffer));
     }
 
@@ -99,7 +90,6 @@ public class WhitelistGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public int getOrder() {
-        // Run before routing so we block early
         return Ordered.HIGHEST_PRECEDENCE + 1;
     }
 }

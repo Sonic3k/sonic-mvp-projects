@@ -1,4 +1,4 @@
-package com.sonic.gateway.config;
+package com.cmacgm.oogpublicapi.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -21,19 +21,14 @@ public class GatewayProperties {
 
     @Data
     public static class BackendConfig {
-        /** Used as URL prefix: /{id}/... */
         private String id;
-        /** Upstream server URL */
         private String baseUrl;
-        /** Whitelisted routes for this backend */
         private List<RouteRule> routes = List.of();
     }
 
     @Data
     public static class RouteRule {
-        /** Ant-style path pattern, e.g. /api/products/** */
         private String path;
-        /** Allowed HTTP methods, e.g. [GET, POST] */
         private List<String> methods = List.of();
     }
 }
