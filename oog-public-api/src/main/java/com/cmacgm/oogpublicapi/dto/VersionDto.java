@@ -1,6 +1,7 @@
 package com.cmacgm.oogpublicapi.dto;
 
 import lombok.Data;
+import java.util.List;
 
 @Data
 public class VersionDto {
@@ -8,4 +9,5 @@ public class VersionDto {
     private String version;
     private String podName;
     private String containerImage;
+    private List<UpstreamVersionDto> upstreams;
 }
